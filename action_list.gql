@@ -123,3 +123,33 @@ actionsByKnowledgeBaseID(
 		limit: Int,
 		nextToken: String
 	): ModelActionConnection
+
+    /*============================================================
+Mutations
+============================================================*/
+
+createAction(input: CreateActionInput!): Action
+updateAction(input: UpdateActionInput!): Action
+deleteAction(id: ID!): Action
+deleteAction_test(actionId: ID!): Boolean
+deleteActionsByActionListID(id: ID!): Boolean
+deleteActionsByActionListID_test(id: ID!): Boolean
+
+createActionList(input: CreateActionListInput!): ActionList
+updateActionList(input: UpdateActionListInput!): ActionList
+deleteActionList(id: ID!): ActionList
+deleteActionListWithItems(id: ID!): Boolean
+
+transferActionListRequest(input: ActionListTransferInput): SimpleResponse
+acceptTransferActionListRequest(input: ActionListTransferAcceptRejectInput): SimpleResponse
+rejectTransferActionListRequest(input: ActionListTransferAcceptRejectInput): SimpleResponse
+assignUserInActionListOrItem(input: AssignUserInActionListOrItemInput): SimpleResponse
+
+onCreateAction(filter: ModelSubscriptionActionFilterInput): Action
+onUpdateAction(filter: ModelSubscriptionActionFilterInput): Action
+onDeleteAction(filter: ModelSubscriptionActionFilterInput): Action
+
+onCreateActionList(filter: ModelSubscriptionActionListFilterInput): ActionList
+onUpdateActionList(filter: ModelSubscriptionActionListFilterInput): ActionList
+onDeleteActionList(filter: ModelSubscriptionActionListFilterInput): ActionList
+
