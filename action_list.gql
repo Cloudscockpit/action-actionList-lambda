@@ -73,6 +73,32 @@ type ActionListTransferUserInfo {
   avatar: String
 }
 
+type SimpleResponse {
+  success: Boolean!
+  message: String!
+}
+
+type ModelActionConnection {
+  items: [Action]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+type ModelActionListConnection {
+  items: [ActionList]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+type Subscription {
+  onCreateAction(filter: ModelSubscriptionActionFilterInput): Action
+  onUpdateAction(filter: ModelSubscriptionActionFilterInput): Action
+  onDeleteAction(filter: ModelSubscriptionActionFilterInput): Action
+  onCreateActionList(filter: ModelSubscriptionActionListFilterInput): ActionList
+  onUpdateActionList(filter: ModelSubscriptionActionListFilterInput): ActionList
+  onDeleteActionList(filter: ModelSubscriptionActionListFilterInput): ActionList
+}
+
 type TransferInfo {
   transferStatus: TransferStatus
   transferRequestByUserInfo: ActionListTransferUserInfo
@@ -123,6 +149,25 @@ actionsByKnowledgeBaseID(
 		limit: Int,
 		nextToken: String
 	): ModelActionConnection
+
+
+    getActionList(id: ID!): ActionList
+actionListsByActionboardID(
+    actionboardID: ID!,
+    filter: ModelActionListFilterInput,
+    limit: Int,
+    nextToken: String,
+    sortDirection: ModelSortDirection
+): ModelActionListConnection
+actionListsByKnowledgeBaseID(
+    filter: ModelActionListFilterInput,
+    knowledgeBaseID: ID!,
+    limit: Int,
+    nextToken: String,
+    sortDirection: ModelSortDirection
+): ModelActionListConnection
+listActionLists(filter: ModelActionListFilterInput, limit: Int, nextToken: String): ModelActionListConnection
+syncActionLists(filter: ModelActionListFilterInput, lastSync: AWSTimestamp, limit: Int, nextToken: String): ModelActionListConnection
 
     /*============================================================
 Mutations
@@ -259,4 +304,63 @@ input UpdateActionListInput {
 input DeleteActionListInput {
 	# 	_version: Int
 	id: ID!
+}
+
+input ActionListTransferInput {
+  actionListId: ID!
+  userId: ID!
+  newBoardId: ID!
+}
+
+input ActionListTransferAcceptRejectInput {
+  actionListId: ID!
+  userId: ID!
+}
+
+input AssignUserInActionListOrItemInput {
+  actionLisOrItemId: ID!
+  assignedUserId: ID!
+  assignedByUserId: ID!
+  type: ActionListOrItemType!
+}
+
+input ModelActionFilterInput {
+	Accepted: ModelBooleanInput
+	ActionItem: ModelStringInput
+	ActionStatus: ModelStatusInput
+	Delegate: ModelBooleanInput
+	Due_date: ModelStringInput
+	Encrypt: ModelBooleanInput
+	GuardRails: ModelStringInput
+	History: ModelStringInput
+	Ignore: ModelBooleanInput
+	KBLink: ModelStringInput
+	Notes: ModelStringInput
+	Notify: ModelStringInput
+	Owner: ModelStringInput
+	Type: ModelStringInput
+	_deleted: ModelBooleanInput
+	actionlistID: ModelIDInput
+	and: [ModelActionFilterInput]
+	createdAt: ModelStringInput
+	id: ModelIDInput
+	isImportant: ModelBooleanInput
+	isUrgent: ModelBooleanInput
+	knowledgeBaseID: ModelIDInput
+	not: ModelActionFilterInput
+	or: [ModelActionFilterInput]
+	prompt: ModelStringInput
+	tags: ModelStringInput
+	updatedAt: ModelStringInput
+	userLike: ModelIntInput
+}
+
+enum Status {
+	Active
+	Done
+	In_Progress
+	New
+	Todo
+	AutoActionAiAgent
+	ActionAssistAgent
 }
